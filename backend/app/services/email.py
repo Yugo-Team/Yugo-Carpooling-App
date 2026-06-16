@@ -25,7 +25,11 @@ def send_email(to: str, subject: str, html: str) -> None:
         },
         timeout=15.0,
     )
-    resp.raise_for_status()
+    #return resend message for diagnostic 
+    if resp.is_error:
+        raise RuntimeError(
+            f"Resend send failed ({resp.status_code}) for {to}: {resp.text}"
+        )
 
 
 def send_verification_code(to: str, code: str) -> None:
