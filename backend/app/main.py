@@ -52,8 +52,17 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[ "http://localhost:5173", "https://athletic-vision-production-2749.up.railway.app"],
-    allow_credentials=True,
+    # Native apps (React Native / Expo) send no Origin header, so CORS does not
+    # apply to them. These origins only matter for browser-based clients: the
+    # web app and Expo web during development.
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:8081",  # Expo web / Metro dev server
+        "https://athletic-vision-production-2749.up.railway.app",
+    ],
+    # Auth is header-based (Bearer token), not cookie-based, so credentialed
+    # CORS is unnecessary. Keeping this False also allows wildcard origins later.
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
