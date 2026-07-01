@@ -8,3 +8,4 @@ motor
 bcrypt
 python-jose[cryptography]
 slowapi
+python-socketio
